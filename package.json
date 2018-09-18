@@ -1,0 +1,29 @@
+{
+  "name": "ljj_commander",
+  "version": "0.0.1",
+  "description": "利用node命令行工具生成文件模板",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "create": "./bin/create p"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LJJCherry/ljj_commander.git"
+  },
+  "keywords": [
+    "命令行、文件模板"
+  ],
+  "author": "ljj",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LJJCherry/ljj_commander/issues"
+  },
+  "homepage": "https://github.com/LJJCherry/ljj_commander#readme",
+  "dependencies": {
+    "commander": "^2.18.0",
+    "ejs": "^2.6.1",
+    "inquirer": "^6.2.0"
+  },
+  "devDependencies": {}
+}

@@ -3,28 +3,28 @@ const fs = require('fs');
 const ejs = require('ejs');
 const path = require('path');
 
-const dirPath = path.resolve(__dirname, '../../');
+const templatePath = path.resolve('templates');
+const outPath = path.resolve('src');
 
 String.prototype.firstUpperCase = function () {
   return this.replace(/^\S/, s => s.toUpperCase());
 };
 
 function createContainerContent(fileName, content) {
-  fs.mkdir(`containers/${fileName.firstUpperCase()}`, () => {
-    fs.writeFile(`containers/${fileName.firstUpperCase()}/index.jsx`, content);
-    fs.writeFile(`containers/${fileName.firstUpperCase()}/index.less`, '');
+  fs.mkdir(`${outPath}/containers/${fileName.firstUpperCase()}`, () => {
+    fs.writeFile(`${outPath}/containers/${fileName.firstUpperCase()}/index.jsx`, content, (err) => {if(err) console.log(err)});
+    fs.writeFile(`${outPath}/containers/${fileName.firstUpperCase()}/index.less`, '', (err) => {if(err) console.log(err)});
     console.log('create container success!');
   });
 }
 
 function createContainer(fileName) {
-  console.log('dirPath', dirPath, __dirname);
   try {
-    fs.readFile(`${dirPath}/templates/container.jsx`, (err, data) => {
+    fs.readFile(`${templatePath}/container.jsx`, (err, data) => {
       if (err) console.log(err);
       const response = ejs.render(data.toString(), { componentName: fileName.firstUpperCase() });
-      if (!fs.existsSync('containers')) {
-        fs.mkdirSync('containers');
+      if (!fs.existsSync(`${outPath}/containers`)) {
+        fs.mkdirSync(`${outPath}/containers`);
         createContainerContent(fileName, response);
       } else {
         createContainerContent(fileName, response);
@@ -38,8 +38,8 @@ function createContainer(fileName) {
 
 function createRouteContent(fileName, moduleName, content) {
   try{
-    fs.writeFile(`routes/${fileName}.jsx`, content);
-    let d = fs.readFileSync('routes/index.jsx', 'utf8');
+    fs.writeFileSync(`${outPath}/routes/${fileName}.jsx`, content);
+    let d = fs.readFileSync(`${outPath}/routes/index.jsx`, 'utf8');
     const reg = new RegExp(`\\b${fileName}\\b`);
     const res = d.match(reg);
     if (res === null) {
@@ -47,7 +47,7 @@ function createRouteContent(fileName, moduleName, content) {
       d = d.replace(reg1, `$1import ${fileName} from './${fileName}';\n`);
       const reg2 = new RegExp('(routes = .{1}\n)');
       d = d.replace(reg2, `$1  ${fileName},\n`);
-      fs.writeFile('routes/index.jsx', d);
+      fs.writeFileSync(`${outPath}/routes/index.jsx`, d);
     } else {
       console.log('路由名已经存在');
     }
@@ -58,7 +58,7 @@ function createRouteContent(fileName, moduleName, content) {
 
 function createRoute(fileName, moduleName) {
   try {
-    fs.readFile(`${dirPath}/templates/route.js`, (err, data) => {
+    fs.readFile(`${templatePath}/route.js`, (err, data) => {
       if (err) console.log(err);
       const response = ejs.render(data.toString(), {
         fileName: fileName.firstUpperCase(),
