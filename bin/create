@@ -1,0 +1,27 @@
+#!/usr/bin/env node
+
+// 定义脚手架的文件路径
+process.env.NODE_PATH = __dirname + '/../node_modules/'
+
+const program = require('commander')
+
+// 定义当前版本
+program
+    .version(require('../package').version )
+
+// 定义使用方法
+program
+  .usage('<command>')
+
+program
+   .command('page')
+   .description('生成文件')
+   .alias('p')
+   .action(() => {
+     require('../command/page')()
+   });
+
+program.parse(process.argv);
+if(!process.argv.slice(2).length) {
+  program.help()
+}
