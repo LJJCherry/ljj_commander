@@ -5,4 +5,6 @@
 用法
 
    `npm run create`
+
+会在src目录下生成我们想要的代码
    
